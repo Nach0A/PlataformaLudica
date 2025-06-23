@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buscaminas Cyberpunk</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.cdnfonts.com/css/ethnocentric" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <h1>Buscaminas</h1>
+        <div class="scoreboard">
+            <div id="mine-count" class="score-item">000</div>
+            <button id="reset-button">Reiniciar</button>
+            <div id="timer" class="score-item">000</div>
+        </div>
+    </header>
+
+    <div id="game-container">
+        <div class="difficulty-selector">
+            <button id="easy-btn" data-difficulty="easy">Fácil</button>
+            <button id="medium-btn" data-difficulty="medium">Normal</button>
+            <button id="hard-btn" data-difficulty="hard">Difícil</button>
+        </div>
+        <div id="board"></div>
+    </div>
+
+    <div id="win-modal" class="hidden">
+        <div class="modal-content">
+            <h2 id="modal-title"></h2>
+            <p id="modal-message"></p>
+            <button id="play-again-btn">Jugar de Nuevo</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

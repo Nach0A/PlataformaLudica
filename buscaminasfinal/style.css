@@ -1,0 +1,411 @@
+/* Estilos base y reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Estilo general del body */
+body {
+    font-family: 'Roboto Mono', monospace, sans-serif;
+    background: linear-gradient(-45deg, #010002, #080808, #1d1c1c, #313131);
+    background-size: 400% 400%;
+    animation: gradientBackground 15s ease infinite;
+    display: flex;
+    flex-direction: column; /* Apilar elementos verticalmente */
+    align-items: center; /* Centrar horizontalmente */
+    min-height: 100vh; /* Asegurar que el body ocupe toda la altura de la ventana */
+    overflow-x: hidden;
+    overflow-y: auto; /* Añadir desplazamiento vertical si el contenido se desborda */
+}
+
+/* Animación para el fondo del body */
+@keyframes gradientBackground {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* Encabezado del juego (contenedor de título y marcador) */
+header {
+    text-align: center;
+    margin-top: 1.5rem; /* Solo margen superior para empujarlo desde la parte superior del body */
+    margin-bottom: 0.5rem; /* Margen inferior para separar del siguiente elemento */
+    padding: 0.5rem;
+    width: 80%;
+    max-width: 600px;
+    background: rgba(20, 20, 20, 0.8);
+    backdrop-filter: blur(10px);
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    z-index: 10;
+    position: relative; /* Asegurar que z-index funcione */
+}
+
+/* Título del juego con animación de brillo */
+header h1 {
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: #ffffff;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 0.5rem;
+    font-family: 'Ethnocentric', sans-serif;
+    text-shadow:
+        0 0 10px rgba(255, 255, 255, 0.5),
+        0 0 20px rgba(255, 255, 255, 0.3),
+        0 0 30px rgba(255, 255, 255, 0.2);
+    animation: titleGlow 2s ease-in-out infinite alternate;
+}
+
+/* Animación para el brillo del título */
+@keyframes titleGlow {
+    from {
+        text-shadow:
+            0 0 10px rgba(255, 255, 255, 0.5),
+            0 0 20px rgba(255, 255, 255, 0.3),
+            0 0 30px rgba(255, 255, 255, 0.2);
+    }
+    to {
+        text-shadow:
+            0 0 20px rgba(255, 255, 255, 0.7),
+            0 0 30px rgba(255, 255, 255, 0.5),
+            0 0 40px rgba(255, 255, 255, 0.3);
+    }
+}
+
+/* Marcador de estadísticas */
+.scoreboard {
+    margin-top: 0.2rem;
+    font-size: 1.1rem;
+    display: flex;
+    gap: 0.7rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+/* Estilo de cada ítem del marcador */
+.score-item {
+    padding: 0.15rem 0.6rem;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(5px);
+    color: white;
+    font-family: 'Roboto Mono', monospace; /* Para números */
+    font-size: 1.3em; /* Hacerlos más grandes para visibilidad */
+    min-width: 70px; /* Asegurar que quepan 3 dígitos */
+    text-align: center;
+    display: flex; /* Para centrar contenido */
+    align-items: center;
+    justify-content: center;
+}
+
+/* Contenedor principal del juego */
+#game-container {
+    display: flex;
+    flex-direction: column; /* Apilar elementos dentro */
+    align-items: center;
+    width: 100%;
+    max-width: 900px;
+    margin-top: 20px; /* Espacio entre header y difficulty */
+    padding: 10px;
+    box-sizing: border-box;
+    flex-grow: 1; /* Permitir que el contenedor del juego ocupe el espacio vertical disponible */
+}
+
+/* Selector de dificultad */
+.difficulty-selector {
+    margin-bottom: 15px; /* Espacio entre selector y tablero */
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    max-width: 600px; /* Alinear con el header */
+    flex-wrap: wrap; /* Permitir que los botones se envuelvan */
+}
+
+.difficulty-selector button {
+    background-color: #2a2a2a;
+    border: 1px solid #666;
+    padding: 8px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    color: #eee;
+    transition: background-color 0.2s, color 0.2s, border-color 0.2s;
+    flex-grow: 1; /* Para que ocupen espacio equitativamente */
+    min-width: 100px; /* Evitar que sean demasiado pequeños */
+}
+
+.difficulty-selector button:hover {
+    background-color: #4a4a4a;
+    border-color: #888;
+}
+
+.difficulty-selector button.active {
+    background: linear-gradient(90deg, #6e3ad6 60%, #b39ddb 100%);
+    color: white;
+    border-color: #a259ff;
+    box-shadow: 0 0 8px rgba(162, 89, 255, 0.5);
+}
+
+/* Tablero de juego (antes #board) */
+#board {
+    display: grid;
+    gap: 2px;
+    border: 2px solid #555;
+    border-radius: 8px;
+    overflow: hidden;
+    background-color: #222;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+    padding: 2px;
+    margin: 0 auto; /* Centrar el tablero horizontalmente dentro de su contenedor */
+}
+
+/* Celda individual (antes .cell) */
+.cell {
+    background-color: #444; /* Color de celda oculta */
+    border: 1px solid #555;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    cursor: pointer;
+    user-select: none;
+    transition: background-color 0.1s ease-in-out, transform 0.1s ease-out;
+    position: relative; /* Para la bandera/interrogante */
+    border-radius: 4px; /* Bordes ligeramente redondeados */
+
+    /* Las variables CSS definirán el tamaño y la fuente, establecidas por JS */
+    width: var(--cell-size, 30px);
+    height: var(--cell-size, 30px);
+    font-size: var(--font-size, 1.2em);
+    color: white; /* Color por defecto para los números */
+}
+
+.cell.hidden:hover {
+    background-color: #555; /* Oscurecer al pasar el mouse */
+    transform: scale(1.02); /* Pequeño efecto de zoom */
+}
+
+.cell.revealed {
+    background-color: #333; /* Fondo de celda revelada */
+    cursor: default;
+    transform: none; /* Eliminar el zoom del hover */
+    border-color: #333; /* Borde del mismo color para que se vea más liso */
+}
+
+.cell.mine {
+    background-color: #ff4fa3; /* Mina en rosa/salmón */
+    color: #fff;
+    text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+}
+
+.cell.exploded-mine {
+    background-color: #ff0000; /* Rojo intenso para la mina que explotó */
+    box-shadow: 0 0 10px #ff0000;
+}
+
+/* Iconos de bandera y pregunta */
+.cell.flag::before {
+    content: '🚩'; /* Bandera */
+    font-size: var(--icon-size, 1.2em); /* Ajustar tamaño de bandera */
+}
+
+.cell.question::before {
+    content: '❓'; /* Interrogante */
+    font-size: var(--icon-size, 1.2em); /* Ajustar tamaño de interrogante */
+}
+
+/* Colores de los números de las minas adyacentes */
+/* Adaptados para el esquema de color oscuro */
+.cell.revealed[data-mines="1"] { color: #87CEEB; } /* Azul cielo */
+.cell.revealed[data-mines="2"] { color: #90EE90; } /* Verde claro */
+.cell.revealed[data-mines="3"] { color: #FF6347; } /* Rojo tomate */
+.cell.revealed[data-mines="4"] { color: #BA55D3; } /* Violeta medio */
+.cell.revealed[data-mines="5"] { color: #FFA07A; } /* Salmón claro */
+.cell.revealed[data-mines="6"] { color: #40E0D0; } /* Turquesa */
+.cell.revealed[data-mines="7"] { color: #FFD700; } /* Oro */
+.cell.revealed[data-mines="8"] { color: #F0F8FF; } /* Blanco azulado */
+
+
+/* Modal de victoria */
+#win-modal {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0,0,0,0.85);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+    transition: opacity 0.3s;
+}
+
+#win-modal.hidden {
+    display: none;
+}
+
+/* Contenido del modal de victoria */
+#win-modal .modal-content {
+    background: #000;
+    color: #fff;
+    padding: 2.5rem 2.5rem 2.5rem 2.5rem;
+    border-radius: 14px;
+    box-shadow:
+        0 0 16px 4px #a259ff,
+        0 0 32px 8px #a259ff,
+        0 0 0 6px #000 inset;
+    min-width: 0;
+    width: 80%;
+    max-width: 600px;
+    text-align: center;
+    position: relative;
+    animation: modalPopIn 1.5s cubic-bezier(.68,-0.55,.27,1.55);
+    margin: 0 auto;
+    font-size: 1rem;
+}
+
+/* Animación de aparición del modal */
+@keyframes modalPopIn {
+    from {
+        opacity: 0;
+        transform: scale(0.85) translateY(40px);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+/* Título del modal de victoria con gradiente animado */
+#win-modal h2 {
+    background: linear-gradient(
+        90deg,
+        #ff4fa3 0%,
+        #4acaff 100%
+    );
+    background-size: 200% 200%;
+    color: transparent;
+    -webkit-background-clip: text;
+    background-clip: text;
+    animation: salmonToCeleste 4s ease-in-out infinite alternate;
+    margin-bottom: 1rem;
+    font-size: 2rem;
+    font-family: 'Ethnocentric', sans-serif;
+    letter-spacing: 1px;
+    text-shadow: none;
+    transition: background-position 1.2s cubic-bezier(0.4, 0, 0.2, 1), filter 0.7s;
+    filter: brightness(1.15) drop-shadow(0 0 8px #a259ff88);
+}
+
+/* Animación del color en el título del modal de victoria */
+@keyframes salmonToCeleste {
+    0% {
+        background-position: 0% 50%;
+    }
+    100% {
+        background-position: 100% 50%;
+    }
+}
+
+/* Texto del modal */
+#win-modal p {
+    margin: 0.5em 0;
+    font-size: 1.1rem;
+    color: #eee;
+}
+
+/* Información de intentos en el modal de victoria */
+#win-modal .attempts-info {
+    font-weight: bold;
+    color: #fff;
+    margin-bottom: 1em;
+}
+
+/* Botones del modal y el botón de Reiniciar */
+#win-modal button, #reset-button {
+    margin: 0.5em 0.5em 0 0.5em;
+    padding: 0.6em 1.5em;
+    border: none;
+    border-radius: 6px;
+    background: linear-gradient(90deg, #6e3ad6 60%, #b39ddb 100%);
+    color: #fff;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(74,30,138,0.08);
+    transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+}
+
+#win-modal button:hover, #reset-button:hover {
+    background: linear-gradient(90deg, #4a1e8a 60%, #9575cd 100%);
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 4px 12px rgba(74,30,138,0.2);
+}
+#win-modal button:active, #reset-button:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 8px rgba(74,30,138,0.08);
+}
+
+/* Ocultar elementos */
+.hidden {
+    display: none;
+}
+
+/* ============================== */
+/* MEDIA QUERIES      */
+/* ============================== */
+
+/* Ajustes para pantallas pequeñas */
+@media (max-width: 768px) {
+    header h1 {
+        font-size: 1.8rem;
+    }
+
+    .scoreboard {
+        flex-direction: column; /* Apilar score items */
+        gap: 0.5rem;
+    }
+
+    .score-item {
+        font-size: 1.1em;
+        padding: 0.1rem 0.4rem;
+    }
+
+    .difficulty-selector {
+        gap: 5px;
+        padding: 0 10px;
+    }
+
+    .difficulty-selector button {
+        padding: 6px 10px;
+        font-size: 0.9em;
+    }
+    #win-modal .modal-content {
+        width: 90%;
+        padding: 1.5rem;
+    }
+    #win-modal h2 {
+        font-size: 1.5rem;
+    }
+    #win-modal p {
+        font-size: 1em;
+    }
+    #win-modal button, #reset-button {
+        padding: 0.5em 1em;
+        font-size: 0.9em;
+    }
+}
+
+@media (max-width: 480px) {
+    header h1 {
+        font-size: 1.5rem;
+    }
+    .score-item {
+        font-size: 1em;
+    }
+}
