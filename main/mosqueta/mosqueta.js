@@ -7,7 +7,7 @@ const DIFFICULTY = {
 };
 
 /* ======== Referencias ======== */
-const gameArea   = document.querySelector('.game-area');
+const gameArea   = document.querySelector('.game-board');
 const cups       = Array.from(document.querySelectorAll('.cup'));
 const attemptsEl = document.getElementById('attempts');
 const winsEl     = document.getElementById('wins');

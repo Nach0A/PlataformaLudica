@@ -78,8 +78,13 @@ if (!$user) {
 
 
         <!-- Header -->
-        <header style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
-            <h1>Mosqueta</h1>
+        <header>
+            <div class=title-box>
+                <h1>Mosqueta</h1>
+                <div class="game-desc">
+                    <h3>Un juego de habilidad y concentración donde debes seguir en qué vaso se esconde la pelota.</h3>
+                </div>
+            </div>
             <div class="scoreboard">
                 <span id="attempts" class="score-item">Intentos: 0</span>
                 <span id="wins" class="score-item">Ganados: 0</span>
@@ -100,7 +105,7 @@ if (!$user) {
 
 
         <!-- Área de juego -->
-        <main class="game-area" style="background: rgba(20, 20, 20, 0.85); backdrop-filter: blur(10px);">
+        <main class="game-board">
             <!-- las posiciones importan para la mezcla; flex-row reverse / order harán el resto -->
             <div class="cup" data-pos="0">
                 <img src="imagenes/cup-neon2.svg" alt="Vaso 1" />

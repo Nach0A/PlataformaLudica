@@ -31,7 +31,7 @@ header {
 }
 
 /* Título del juego con animación de brillo */
-.title-box h1 {
+h1 {
     font-size: 2.2rem;
     font-weight: 800;
     color: #ffffff;
@@ -63,7 +63,6 @@ header {
     }
 }
 
-/* test */
 /* inicialmente oculto */
 .title-box .game-desc {
     overflow: hidden;
@@ -127,7 +126,6 @@ header {
         /* ajusta según tu contenido */
     }
 }
-/* FIN TEST */
 
 /* Marcador de estadísticas */
 .scoreboard {

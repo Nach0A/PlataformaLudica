@@ -1,10 +1,13 @@
 :root {
-    --bg: #0d0b0e;
-    --magenta: #ff1efb;
-    --cup-size-desk: 300px;/* desktop ≥ 1024 px */
-    --cup-size-tab: 260px;/* tablet 768-1023 px */
-    --cup-size-mobile: 220px;/* móvil ≤ 767 px */
-    font-family: system-ui, sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    /* --bg: #0d0b0e; */
+    /* --magenta: #ff1efb; */
+    /* --cup-size-desk: 300px;desktop ≥ 1024 px */
+    /* --cup-size-tab: 260px;tablet 768-1023 px */
+    /* --cup-size-mobile: 220px;móvil ≤ 767 px */
+    /* font-family: system-ui, sans-serif; */
     /* agregar tipografia */
 }
 
@@ -15,11 +18,15 @@ body {
     flex-direction: column;
     align-items: center;
     padding-top: 50px;
-    min-height: 100vh;
-    margin: 0;
+    /* min-height: 100vh; */
+    /* margin: 0; */
 }
 
 header {
+    /* display: flex; */
+    /* flex-direction: column; */
+    /* align-items: center; */
+    /* justify-content: center; */
     text-align: center;
     margin: 3.5rem auto 1.2rem auto;
     padding: 1.2rem 1.5rem;
@@ -29,14 +36,14 @@ header {
     backdrop-filter: blur(10px);
     border-radius: 16px;
     box-shadow: 0 4px 18px rgba(0,0,0,0.45);
-    border: 1.5px solid rgba(255,255,255,0.12);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    border: 1.5px solid rgba(255,255,255,0.1);
+    /* display: flex; */
+    /* flex-direction: column; */
+    /* align-items: center; */
+    /* justify-content: center; */
 }
 
-header h1 {
+h1 {
     font-size: 2.2rem;
     font-weight: 800;
     color: #ffffff;
@@ -49,6 +56,7 @@ header h1 {
         0 0 20px rgba(255, 255, 255, 0.3),
         0 0 30px rgba(255, 255, 255, 0.2);
     animation: titleGlow 2s ease-in-out infinite alternate;
+    cursor: pointer;
 }
 
 @keyframes titleGlow {
@@ -63,6 +71,70 @@ header h1 {
             0 0 20px rgba(255, 255, 255, 0.7),
             0 0 30px rgba(255, 255, 255, 0.5),
             0 0 40px rgba(255, 255, 255, 0.3);
+    }
+}
+
+/* inicialmente oculto */
+.title-box .game-desc {
+    overflow: hidden;
+    height: 0;
+    opacity: 0;
+    transition:
+        height .5s cubic-bezier(.68, -0.55, .27, 1.55),
+        /* explicacion de como funciona */
+        /* Una Bézier cúbica describe la velocidad de la animación mediante cuatro puntos de control: */
+        /* (0,0) → (x1, y1) → (x2, y2) → (1,1) */
+        /* En este caso: */
+        /* P1: ( 0.68 , -0.55 ) */
+        /* Arranca rápido (pendiente inicial > 1) y, como y1 es negativo, empieza antes de t = 0 (efecto “salto”). */
+        /* P2: ( 0.27 , 1.55 ) */
+        /* Con y2 > 1 la curva rebasa el destino y vuelve, generando un leve overshoot. */
+        /* Visualmente se pasa un poco y rebota suavemente hasta asentarse. */
+        opacity .3s;
+    interpolate-size: allow-keywords;/* permite animar hasta auto (funcion experimental)*/
+
+    font-size: 1rem;
+    color: #e0e0e0;
+    margin-bottom: .5rem;
+    background: rgba(40, 40, 40, .7);
+    border-radius: 0 0 10px 10px;
+    padding: 0 1rem;
+    width: 90%;
+    margin: 0 auto;
+    text-align: justify;
+}
+
+.title-box:hover .game-desc,
+.title-box:focus-within .game-desc {
+    height: auto;/* se anima gracias a interpolate-size */
+    opacity: 1;
+}
+
+/* --- Compatibilidad para navegadores sin interpolate-size */
+@supports not (interpolate-size:allow-keywords) {
+    .title-box .game-desc {
+        height: 0;
+        /* se animará max-height en su lugar */
+        max-height: 0;
+        transition:
+            max-height .5s cubic-bezier(.68, -0.55, .27, 1.55),
+            opacity .3s;
+        
+        font-size: 1rem;
+        color: #e0e0e0;
+        margin-bottom: .5rem;
+        background: rgba(40, 40, 40, .7);
+        border-radius: 0 0 10px 10px;
+        padding: 0 1rem;
+        width: 90%;
+        margin: 0 auto;
+        text-align: justify;
+    }
+
+    .title-box:hover .game-desc,
+    .title-box:focus-within .game-desc {
+        max-height: 10rem;
+        /* ajusta según tu contenido */
     }
 }
 
@@ -137,7 +209,12 @@ header h1 {
 }
 
 /* ───────── Área de juego ───────── */
-.game-area {
+
+/* style="background: rgba(20, 20, 20, 0.85); backdrop-filter: blur(10px);" */
+
+.game-board {
+    background: rgba(20, 20, 20, 0.85);
+    backdrop-filter: blur(10px);
     /* z-index: -1; */
     display: flex;
     justify-content: center;
@@ -273,13 +350,13 @@ header h1 {
         gap: .5rem;
     }
 
-    .game-area {
+    .game-board {
         gap: 1rem;
     }
 }
 
 @media (min-width: 0px) {
-    .game-area {
+    .game-board {
         height: 20vh;
     }
     .cup {
@@ -299,13 +376,13 @@ header h1 {
 }
 
 /* ─── Bloqueo de interacción durante el barajado ─── */
-.game-area.shuffling .cup            { pointer-events: none; }   /* sin clicks ni hovers */
-.game-area.shuffling .cup:hover img  { animation: none; }
-.game-area.shuffling .cup:hover .ball{ opacity: 0;  animation: none; }
+.game-board.shuffling .cup            { pointer-events: none; }   /* sin clicks ni hovers */
+.game-board.shuffling .cup:hover img  { animation: none; }
+.game-board.shuffling .cup:hover .ball{ opacity: 0;  animation: none; }
 
 /* ─── Sin hover mientras la pelota está escondida ─── */
-.game-area.no-hover .cup:hover img  { animation: none; }
-.game-area.no-hover .cup:hover .ball{ opacity: 0; animation: none; }
+.game-board.no-hover .cup:hover img  { animation: none; }
+.game-board.no-hover .cup:hover .ball{ opacity: 0; animation: none; }
 
 /* ─── Desciende y cubre la pelota ─── */
 @keyframes coverBall {
