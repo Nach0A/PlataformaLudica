@@ -158,23 +158,39 @@ if (!$user) {
         });
         linkLogo.addEventListener("click", e => {
             e.preventDefault();
+            // Agrega la animación
+    linkLogo.classList.add("animate-click");
+
+    // La quita después de que termina, para que pueda repetirse
+    setTimeout(() => {
+        linkLogo.classList.remove("animate-click");
+    }, 600); // Duración de la animación
             mostrarInicio();
         });
 
         // Al cargar la página: ocultar preloader y mostrar sección según hash
         window.addEventListener("load", () => {
-            const pre = document.getElementById("preloader");
-            pre.style.opacity = "0";
-            pre.style.visibility = "hidden";
-            pre.style.pointerEvents = "none";
+    const pre = document.getElementById("preloader");
+    pre.style.opacity = "0";
+    pre.style.visibility = "hidden";
+    pre.style.pointerEvents = "none";
 
-            if (location.hash === "#juegos") {
-                mostrarJuegos();
-            } else {
-                mostrarInicio();
-            }
-        });
-    </script>
+    if (location.hash === "#juegos") {
+        mostrarJuegos();
+    } else {
+        mostrarInicio();
+
+        // Si viene de otra página con animación
+        if (location.hash === "#inicioAnimado") {
+            linkLogo.classList.add("animate-click");
+            setTimeout(() => {
+                linkLogo.classList.remove("animate-click");
+            }, 400); // Tiempo igual al de la animación
+        }
+    }
+});
+</script>
+<script src="../navbar/script.js"></script>
 </body>
 
 </html>

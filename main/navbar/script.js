@@ -63,21 +63,33 @@ function logout() {
 
 // Al cargar la página, oculta el preloader y renderiza el menú y la sección correspondiente
 window.addEventListener("load", () => {
-    // Oculta el preloader visualmente
+    // ⏱️ Ocultar preloader
     const preloader = document.getElementById("preloader");
     preloader.style.opacity = "0";
     preloader.style.visibility = "hidden";
     preloader.style.pointerEvents = "none";
 
-    // Renderiza el menú del usuario
+    // 1) Si hay hash de animar logo, ejecútalo y límpialo YA:
+    if (location.hash === "#inicioAnimado") {
+        const linkLogo = document.getElementById("linkLogo");
+        if (linkLogo) {
+            linkLogo.classList.add("animate-click");
+            setTimeout(() => {
+                linkLogo.classList.remove("animate-click");
+            }, 400);
+        }
+        // Quita el hash sin recargar, para que las siguientes llamadas CRUD no lo vean
+        history.replaceState(null, "", location.pathname + location.search);
+    }
+
+    // 2) Ahora sí renderizamos menú y sección:
     renderMenu();
 
-    // Muestra la sección según el hash de la URL
-    const hash = location.hash;
-    if (hash === "#juegos") {
+    // 3) Finalmente, mostramos sección según hash estándar
+    if (location.hash === "#juegos") {
         mostrarJuegos();
     } else {
-        // Por defecto, muestra inicio
         mostrarInicio();
     }
 });
+

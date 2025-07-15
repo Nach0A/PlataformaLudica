@@ -1,17 +1,18 @@
-<?php
-// memory.php — Control de sesión y protección de la página
-session_start();
-require '../pagina-principal/db.php';
+    <?php
+    // memory.php — Control de sesión y protección de la página
+    session_start();
+    require '../pagina-principal/db.php';
 
-$user = $_SESSION['usuario'] ?? null;
-if (!$user) {
-    header("Location: ../pagina-principal/login.php");
-    exit;
-}
-?>
+    $user = $_SESSION['usuario'] ?? null;
+    if (!$user) {
+        header("Location: ../pagina-principal/login.php");
+        exit;
+    }
+    ?>
 
-<!DOCTYPE html>
-<html lang="es">
+    <!DOCTYPE html>
+    <html lang="es">
+
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -28,14 +29,18 @@ if (!$user) {
             <img src="../navbar/imagenes/logo.jpg" alt="Logo Zentryx" id="preloader-logo">
         </div>
         <!-- ======= FIN PRELOADER ===== -->
-        
+
         <!-- ======== NAVBAR ======== -->
         <nav class="navbar navbar-expand-lg shadow-sm py-3">
             <div class="container-fluid">
-                <a class="navbar-brand fw-bold fs-4" href="../pagina-principal/Inicio.php#inicio">
-                    <img src="../navbar/imagenes/logo.jpg" alt="Logo" width="30" height="30"
-                        class="d-inline-block align-text-top">
+                <a class="navbar-brand fw-bold fs-4 text-white"
+                    href="../pagina-principal/inicio.php#inicioAnimado"
+                    id="linkLogo">
+                    <img src="../navbar/imagenes/logo.jpg" width="30" height="30">
                     &nbsp;Zentryx
+                </a>
+
+
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                     <span class="navbar-toggler-icon"></span>
@@ -80,10 +85,10 @@ if (!$user) {
             </div>
         </nav>
         <!-- CONTENIDO GENERAL (sin login) -->
-            <div class="Contenido" id="Contenido">
-                <div id="mainContent" class="container mt-5" style="display: none;"></div>
-                <div class="container mt-5 position-relative" id="juegosContent" style="display: none;"></div>
-            </div>
+        <div class="Contenido" id="Contenido">
+            <div id="mainContent" class="container mt-5" style="display: none;"></div>
+            <div class="container mt-5 position-relative" id="juegosContent" style="display: none;"></div>
+        </div>
         <!-- FIN NAVBAR -->
 
 
@@ -93,10 +98,10 @@ if (!$user) {
                 <h1>Memory</h1>
                 <div class="game-desc">
                     <h3>Memory es un juego de cartas por parejas:<br>
-                    -Se colocan todas boca abajo y por turno se giran dos cartas.<br>
-                    -Si coinciden, se quedan dadas vuelta.<br>
-                    -Si no coinciden, se vuelven a voltear.<br>
-                    -Se gana cuando se tiene todas las parejas.</h3>
+                        -Se colocan todas boca abajo y por turno se giran dos cartas.<br>
+                        -Si coinciden, se quedan dadas vuelta.<br>
+                        -Si no coinciden, se vuelven a voltear.<br>
+                        -Se gana cuando se tiene todas las parejas.</h3>
                 </div>
             </div>
             <div class="scoreboard">
@@ -114,7 +119,7 @@ if (!$user) {
         <!-- area de juego -->
         <main>
             <section class="game-board">
-            <!-- se generarán 3 columnas × 8 filas de cartas -->
+                <!-- se generarán 3 columnas × 8 filas de cartas -->
             </section>
         </main>
         <!-- fin area de juego -->
@@ -132,9 +137,10 @@ if (!$user) {
             </div>
         </div>
         <!-- fin popup al ganar -->
-        
+
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"></script>
         <script src="./memory.js"></script>
         <script src="../navbar/script.js"></script>
     </body>
-</html>
+
+    </html>

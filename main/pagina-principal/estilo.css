@@ -6,6 +6,7 @@ body {
     position: relative;
     min-height: 100vh;
     overflow-x: hidden;
+    padding-top: 70px;
 }
 
 /**/
@@ -103,9 +104,15 @@ body {
 }
 
 .navbar {
-    background-color: rgb(20, 20, 20);
+   position: fixed; /* Fija el navbar arriba */
+    top: 0;           /* Se asegura de que esté pegado al borde superior */
+    left: 0;
+    right: 0;
+    z-index: 1030;    /* Asegura que esté por encima de otros elementos */
+    background-color: rgba(20, 20, 20, 0.85); /* Color con transparencia */
+    backdrop-filter: blur(6px); /* Difumina el fondo que se ve detrás */
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
-    /* position: fixed;*/
+    opacity: 0.9;
 }
 
 .navbar .navbar-nav .nav-link,
@@ -468,4 +475,22 @@ body {
 .tarjeta-juego .play-btn {
     position: relative;
     z-index: 1;
+}
+@keyframes logoClickAnimation {
+    0% {
+        transform: scale(1);
+        text-shadow: 0 0 2px #c57eff;
+    }
+    50% {
+        transform: scale(1.05);
+        text-shadow: 0 0 6px #d6c4ff;
+    }
+    100% {
+        transform: scale(1);
+        text-shadow: 0 0 2px #c57eff;
+    }
+}
+
+.navbar-brand.animate-click {
+    animation: logoClickAnimation 0.4s ease-in-out;
 }

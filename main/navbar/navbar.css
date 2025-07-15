@@ -338,3 +338,21 @@ body {
         background-position: 0% 50%;
     }
 }
+@keyframes logoClickAnimation {
+    0% {
+        transform: scale(1);
+        text-shadow: 0 0 2px #c57eff;
+    }
+    50% {
+        transform: scale(1.05);
+        text-shadow: 0 0 6px #d6c4ff;
+    }
+    100% {
+        transform: scale(1);
+        text-shadow: 0 0 2px #c57eff;
+    }
+}
+
+.navbar-brand.animate-click {
+    animation: logoClickAnimation 0.4s ease-in-out;
+}
