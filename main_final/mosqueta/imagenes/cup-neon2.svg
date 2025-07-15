@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- cup‑neon.svg – halo mínimo + degradado longitudinal + sombra exterior ligera (versión anterior al ajuste de radios) -->
+<svg width="200" height="230" viewBox="0 0 200 230" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Clip interior -->
+    <clipPath id="cupClip">
+      <path d="M30 38 L30 162 A70 18 0 0 0 170 162 L170 38 Z" />
+    </clipPath>
+
+    <!-- Glow + Sombra exterior (proyectada hacia fuera) -->
+    <filter id="neonFx" x="-70%" y="-70%" width="240%" height="240%">
+      <!-- brillo principal -->
+      <feGaussianBlur in="SourceGraphic" stdDeviation="0.8" result="glow" />
+      <!-- combinación glow + trazo -->
+      <feMerge>
+        <feMergeNode in="glow" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+      <!-- sombra exterior envolvente -->
+      <feDropShadow dx="0" dy="0" stdDeviation="2.5" flood-color="#000" flood-opacity="0.45" />
+    </filter>
+
+    <!-- Gradientes longitudinales para atenuar extremos -->
+    <linearGradient id="strokeGradTop" gradientUnits="userSpaceOnUse" x1="30" y1="38" x2="170" y2="38">
+      <stop offset="0%"   stop-color="#ff6afd" stop-opacity="0" />
+      <stop offset="12%"  stop-color="#ff6afd" stop-opacity="0.25" />
+      <stop offset="50%"  stop-color="#ff6afd" stop-opacity="1" />
+      <stop offset="88%"  stop-color="#ff6afd" stop-opacity="0.25" />
+      <stop offset="100%" stop-color="#ff6afd" stop-opacity="0" />
+    </linearGradient>
+
+    <linearGradient id="strokeGradBottom" gradientUnits="userSpaceOnUse" x1="30" y1="162" x2="170" y2="162">
+      <stop offset="0%"   stop-color="#ff6afd" stop-opacity="0" />
+      <stop offset="12%"  stop-color="#ff6afd" stop-opacity="0.25" />
+      <stop offset="50%"  stop-color="#ff6afd" stop-opacity="1" />
+      <stop offset="88%"  stop-color="#ff6afd" stop-opacity="0.25" />
+      <stop offset="100%" stop-color="#ff6afd" stop-opacity="0" />
+    </linearGradient>
+
+    <!-- Reflejo radial -->
+    <radialGradient id="neonBlend" cx="0.5" cy="0.5" r="0.65">
+      <stop offset="0%"  stop-color="#ff6afd" stop-opacity="0.35" />
+      <stop offset="60%" stop-color="#ff6afd" stop-opacity="0.10" />
+      <stop offset="100%" stop-color="#ff6afd" stop-opacity="0" />
+    </radialGradient>
+  </defs>
+
+  <!-- Cuerpo y tapa (tapa con radios 68×17) -->
+  <g fill="#262429">
+    <ellipse cx="100" cy="38" rx="70" ry="18" />
+    <path d="M30 38 L30 162 A70 18 0 0 0 170 162 L170 38 Z" />
+  </g>
+
+  <!-- Reflejos que integran arco y pared -->
+
+  <!-- Arco superior con degradado longitudinal + halo/sombra -->
+  <g stroke="url(#strokeGradTop)" stroke-linecap="round" fill="none" filter="url(#neonFx)">
+    <path d="M30 38 A70 18 0 0 1 170 38" stroke-width="6"  opacity="0.02" />
+    <path d="M30 38 A70 18 0 0 1 170 38" stroke-width="5.5" opacity="0.04" />
+    <path d="M30 38 A70 18 0 0 1 170 38" stroke-width="5"  opacity="0.06" />
+    <path d="M30 38 A70 18 0 0 1 170 38" stroke-width="4.5" opacity="0.09" />
+    <path d="M30 38 A70 18 0 0 1 170 38" stroke-width="4"  opacity="0.13" />
+    <path d="M30 38 A70 18 0 0 1 170 38" stroke-width="3.5" opacity="0.19" />
+    <path d="M30 38 A70 18 0 0 1 170 38" stroke-width="3"  opacity="0.28" />
+    <path d="M30 38 A70 18 0 0 1 170 38" stroke-width="2.5" opacity="0.42" />
+    <path d="M30 38 A70 18 0 0 1 170 38" stroke-width="2"  opacity="0.64" />
+    <path d="M30 38 A70 18 0 0 1 170 38" stroke-width="1"  opacity="1"   />
+  </g>
+
+  <!-- Logo fantasma -->
+  <image href="logo.jpg" x="45" y="70" width="110" height="105" opacity="0.10" clip-path="url(#cupClip)" />
+
+  <!-- Arco inferior con mismo tratamiento -->
+  <g stroke="url(#strokeGradBottom)" stroke-linecap="round" fill="none" filter="url(#neonFx)">
+    <path d="M30 162 A70 18 0 0 0 170 162" stroke-width="6"  opacity="0.02" />
+    <path d="M30 162 A70 18 0 0 0 170 162" stroke-width="5.5" opacity="0.04" />
+    <path d="M30 162 A70 18 0 0 0 170 162" stroke-width="5"  opacity="0.06" />
+    <path d="M30 162 A70 18 0 0 0 170 162" stroke-width="4.5" opacity="0.09" />
+    <path d="M30 162 A70 18 0 0 0 170 162" stroke-width="4"  opacity="0.13" />
+    <path d="M30 162 A70 18 0 0 0 170 162" stroke-width="3.5" opacity="0.19" />
+    <path d="M30 162 A70 18 0 0 0 170 162" stroke-width="3"  opacity="0.28" />
+    <path d="M30 162 A70 18 0 0 0 170 162" stroke-width="2.5" opacity="0.42" />
+    <path d="M30 162 A70 18 0 0 0 170 162" stroke-width="2"  opacity="0.64" />
+    <path d="M30 162 A70 18 0 0 0 170 162" stroke-width="1"  opacity="1"   />
+  </g>
+
+  <!-- Interior oscuro -->
+  <ellipse cx="100" cy="162" rx="68" ry="17" fill="#0d0c0e" opacity="0.85" />
+
+
+</svg>

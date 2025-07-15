@@ -1,0 +1,415 @@
+/* Estilos base y reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Estilo general del body */
+body {
+    font-family: serif;
+    background: linear-gradient(-45deg, #010002, #080808, #1d1c1c, #313131);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 50px;
+}
+
+/* Encabezado del juego */
+header {
+    text-align: center;
+    margin: 3rem 0 0.5rem 0;
+    padding: 0.5rem;
+    width: 80%;
+    max-width: 600px;
+    background: rgba(20, 20, 20, 0.8);
+    backdrop-filter: blur(10px);
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    z-index: 1;
+}
+
+/* Título del juego con animación de brillo */
+.title-box h1 {
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: #ffffff;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 0.5rem;
+    font-family: 'Ethnocentric', sans-serif;
+    text-shadow:
+        0 0 10px rgba(255, 255, 255, 0.5),
+        0 0 20px rgba(255, 255, 255, 0.3),
+        0 0 30px rgba(255, 255, 255, 0.2);
+    animation: titleGlow 2s ease-in-out infinite alternate;
+    cursor: pointer;
+}
+
+/* Animación para el brillo del título */
+@keyframes titleGlow {
+    from {
+        text-shadow:
+            0 0 10px rgba(255, 255, 255, 0.5),
+            0 0 20px rgba(255, 255, 255, 0.3),
+            0 0 30px rgba(255, 255, 255, 0.2);
+    }
+    to {
+        text-shadow:
+            0 0 20px rgba(255, 255, 255, 0.7),
+            0 0 30px rgba(255, 255, 255, 0.5),
+            0 0 40px rgba(255, 255, 255, 0.3);
+    }
+}
+
+/* test */
+/* inicialmente oculto */
+.title-box .game-desc {
+    overflow: hidden;
+    height: 0;
+    opacity: 0;
+    transition:
+        height .5s cubic-bezier(.68, -0.55, .27, 1.55),
+        /* explicacion de como funciona */
+        /* Una Bézier cúbica describe la velocidad de la animación mediante cuatro puntos de control: */
+        /* (0,0) → (x1, y1) → (x2, y2) → (1,1) */
+        /* En este caso: */
+        /* P1: ( 0.68 , -0.55 ) */
+        /* Arranca rápido (pendiente inicial > 1) y, como y1 es negativo, empieza antes de t = 0 (efecto “salto”). */
+        /* P2: ( 0.27 , 1.55 ) */
+        /* Con y2 > 1 la curva rebasa el destino y vuelve, generando un leve overshoot. */
+        /* Visualmente se pasa un poco y rebota suavemente hasta asentarse. */
+        opacity .3s;
+    interpolate-size: allow-keywords;/* permite animar hasta auto (funcion experimental)*/
+
+    font-size: 1rem;
+    color: #e0e0e0;
+    margin-bottom: .5rem;
+    background: rgba(40, 40, 40, .7);
+    border-radius: 0 0 10px 10px;
+    padding: 0 1rem;
+    width: 90%;
+    margin: 0 auto;
+    text-align: justify;
+}
+
+.title-box:hover .game-desc,
+.title-box:focus-within .game-desc {
+    height: auto;/* se anima gracias a interpolate-size */
+    opacity: 1;
+}
+
+/* --- Compatibilidad para navegadores sin interpolate-size */
+@supports not (interpolate-size:allow-keywords) {
+    .title-box .game-desc {
+        height: 0;
+        /* se animará max-height en su lugar */
+        max-height: 0;
+        transition:
+            max-height .5s cubic-bezier(.68, -0.55, .27, 1.55),
+            opacity .3s;
+        
+        font-size: 1rem;
+        color: #e0e0e0;
+        margin-bottom: .5rem;
+        background: rgba(40, 40, 40, .7);
+        border-radius: 0 0 10px 10px;
+        padding: 0 1rem;
+        width: 90%;
+        margin: 0 auto;
+        text-align: justify;
+    }
+
+    .title-box:hover .game-desc,
+    .title-box:focus-within .game-desc {
+        max-height: 10rem;
+        /* ajusta según tu contenido */
+    }
+}
+/* FIN TEST */
+
+/* Marcador de estadísticas */
+.scoreboard {
+    margin-top: 0.2rem;
+    font-size: 1.1rem;
+    display: flex;
+    gap: 0.7rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+/* Estilo de cada ítem del marcador */
+.score-item {
+    padding: 0.15rem 0.6rem;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(5px);
+    color: white;
+}
+
+/* Tablero de juego con grid */
+.game-board {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    gap: 0.8rem;
+    width: clamp(60vw, 70vw, 90vw);
+    height: clamp(55vh, 70vh, 80vh);
+    overflow-y: auto;
+    justify-content: center;
+    align-content: start;
+    padding: 0.8rem;
+    border-radius: 8px;
+
+}
+
+/* Carta individual */
+.card {
+    z-index: 1;
+    --bs-card-bg: #231E25;
+    width: 100%;
+    padding-top: 130%;
+    position: relative;
+    perspective: 1000px;
+}
+
+/* Contenedor interno de la carta para el efecto flip */
+.card-inner {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    transition: transform 0.6s;
+    transform-style: preserve-3d;
+}
+
+/* Efecto de voltear la carta */
+.card.flipped .card-inner {
+    transform: rotateY(180deg);
+}
+
+/* Ambas caras de la carta: frente y dorso */
+.card-front,
+.card-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    border: 0;
+    /* Eliminar el borde */
+    border-radius: 8px;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+/* Imagen del reverso de la carta */
+.card-front {
+    background: transparent url('./imagenes/cartas-diseño-con-el-logo/reves.png') center/cover;
+}
+
+/* Imagen del frente de la carta (asignada dinámicamente) */
+.card-back {
+    transform: rotateY(180deg);
+    /* border-radius: 8px; */
+
+}
+
+/* Modal de victoria */
+.modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Ocultar elementos */
+.hidden {
+    display: none;
+}
+
+/* Contenido del modal */
+.modal-content {
+    background: #fff;
+    padding: 2rem;
+    border-radius: 8px;
+    text-align: center;
+}
+
+/* Información de intentos en el modal */
+.attempts-info {
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 0.5em;
+}
+
+/* Estilos para el botón de reinicio */
+#restart-btn {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    padding: 7px 16px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 4px;
+    cursor: pointer;
+    margin: 6px 6px 0 6px;
+    transition: background-color 0.3s ease;
+    backdrop-filter: blur(5px);
+    font-size: 1rem;
+}
+
+#restart-btn:hover {
+    background: rgba(40, 40, 40, 0.8);
+}
+
+/* Modal de victoria (estilos avanzados) */
+#win-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.85);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+    transition: opacity 0.3s;
+}
+
+#win-modal.hidden {
+    display: none;
+}
+
+/* Contenido del modal de victoria */
+#win-modal .modal-content {
+    background: #000;
+    color: #fff;
+    padding: 2.5rem 2.5rem 2.5rem 2.5rem;
+    border-radius: 14px;
+    box-shadow:
+        0 0 16px 4px #a259ff,
+        0 0 32px 8px #a259ff,
+        0 0 0 6px #000 inset;
+    min-width: 0;
+    width: 80%;
+    max-width: 600px;
+    text-align: center;
+    position: relative;
+    animation: modalPopIn 1.5s cubic-bezier(.68, -0.55, .27, 1.55);
+    margin: 0 auto;
+    font-size: 1rem;
+}
+
+/* Animación de aparición del modal */
+@keyframes modalPopIn {
+    from {
+        opacity: 0;
+        transform: scale(0.85) translateY(40px);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+/* Título del modal de victoria con gradiente animado */
+#win-modal h2 {
+    /* Gradiente animado de color salmón a celeste y regreso */
+    background: linear-gradient(90deg,
+            #ff4fa3 0%,
+            #4acaff 100%);
+    background-size: 200% 200%;
+    color: transparent;
+    -webkit-background-clip: text;
+    background-clip: text;
+    animation: salmonToCeleste 4s ease-in-out infinite alternate;
+    margin-bottom: 1rem;
+    font-size: 2rem;
+    font-family: 'Ethnocentric', sans-serif;
+    letter-spacing: 1px;
+    text-shadow: none;
+    transition: background-position 1.2s cubic-bezier(0.4, 0, 0.2, 1), filter 0.7s;
+    filter: brightness(1.15) drop-shadow(0 0 8px #a259ff88);
+}
+
+/* Animación del color en el título del modal de victoria */
+@keyframes salmonToCeleste {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    100% {
+        background-position: 100% 50%;
+    }
+}
+
+/* Texto del modal */
+#win-modal p {
+    margin: 0.5em 0;
+    font-size: 1.1rem;
+}
+
+/* Información de intentos en el modal de victoria */
+#win-modal .attempts-info {
+    font-weight: bold;
+    color: #fff;
+    margin-bottom: 1em;
+}
+
+/* Botones del modal */
+#win-modal button {
+    margin: 0.5em 0.5em 0 0.5em;
+    padding: 0.6em 1.5em;
+    border: none;
+    border-radius: 6px;
+    background: linear-gradient(90deg, #6e3ad6 60%, #b39ddb 100%);
+    color: #fff;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(74, 30, 138, 0.08);
+    transition: background 0.2s, transform 0.2s;
+}
+
+#win-modal button:hover {
+    background: linear-gradient(90deg, #4a1e8a 60%, #9575cd 100%);
+    transform: translateY(-2px) scale(1.04);
+}
+
+/* ============================== */
+/*         MEDIA QUERIES         */
+/* ============================== */
+
+/* Ajuste de columnas del tablero según el ancho */
+@media (max-width: 1024px) {
+    .game-board {
+        grid-template-columns: repeat(6, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .game-board {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+@media (max-width: 480px) {
+    .game-board {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+/* Ajuste del modal en pantallas pequeñas */
+@media (max-width: 700px) {
+    #win-modal .modal-content {
+        width: 95%;
+        padding: 1.2rem 0.5rem 1.2rem 0.5rem;
+    }
+}
