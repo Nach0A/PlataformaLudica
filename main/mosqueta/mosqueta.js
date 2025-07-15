@@ -1,174 +1,199 @@
-/* ======== Configuración de dificultad ======== */
+/* ========= Configuración de dificultad ========= */
 const DIFFICULTY = {
-    easy:       { swaps:  6, speed:  900 },
-    normal:     { swaps: 12, speed:  650 },
-    hard:       { swaps: 18, speed:  450 },
-    impossible: { swaps: 30, speed:  330 }
+    easy: { swaps: 6, speed: 900 },
+    normal: { swaps: 4, speed: 1200 },//12  650
+    hard: { swaps: 18, speed: 450 },
+    impossible: { swaps: 30, speed: 330 }
 };
 
-/* ======== Referencias ======== */
-const gameArea   = document.querySelector('.game-board');
-const cups       = Array.from(document.querySelectorAll('.cup'));
+/* ========= Mensajes ========= */
+const WRONG_MESSAGES = [
+    '¡Fallaste! 😢', 'Te has equivocado.', 'No fue la opción correcta.',
+    'Esta vez no acertaste.', 'Uy, no era ahí.', '¡Casi!', '¡Ni cerca, campeón!',
+    'La bola estaba en otro vaso.', 'Errar es parte del juego. ¡Sigue! 💪',
+    'Ánimo, la próxima lo clavas!', 'Le pifiaste!', 'Te comiste el amague.',
+    'Te patinó la bocha.', '¡Te falló la puntería!', 'Te fuiste con la finta.',
+    '¿Revanchita?', '¿Otra ronda para redimirte?'
+];
+const WIN_MESSAGES = [
+    '¡Correcto! 🎉', '¡Excelente jugada!', '¡La clavaste!', '¡Bien ahí!',
+    '¡Lo encontraste!', '¡Impecable!', '¡Genial, sigue así!', '¡Eso es habilidad!',
+    '¡Durísimo! 💪', '¡Crack total!', '¡Maestro de la mosqueta!', '¡Te salió redondo!',
+    '¡Golazo!', '¡Perfecto!', '¡Aplausos!', '¡Brillante!', '¡De diez!'
+];
+
+/* ========= Referencias DOM ========= */
+const gameArea = document.querySelector('.game-board');
+const cups = Array.from(document.querySelectorAll('.cup'));
 const attemptsEl = document.getElementById('attempts');
-const winsEl     = document.getElementById('wins');
+const winsEl = document.getElementById('wins');
+const resultEl = document.getElementById('resultBanner');
+const feedbackEl = document.getElementById('feedbackBanner');
+const nextEl = document.getElementById('nextBanner');
+const streakEl = document.getElementById('streak');
 
-/* ======== Estado ======== */
-let currentDiff = 'easy';    // nivel de dificultad
-let stage       = 'hide';    // hide → shuffling → guess → finished
-let attempts    = 0;         // intentos totales
-let wins        = 0;         // victorias totales
-let ballIndex   = null;      // posición actual de la pelota
 
-/* ======== Utilidades ======== */
+/* ========= Estado ========= */
+let currentDiff = 'normal'; // Dificultad inicial
+let stage = 'hide';
+let attempts = 0;
+let wins = 0;
+let streak = 0;
+let ballIndex = null;
+
+/* ========= Helpers ========= */
 const sleep = ms => new Promise(r => setTimeout(r, ms));
+const rand = arr => arr[Math.floor(Math.random() * arr.length)];
 
-/* ======== Inicialización ======== */
+function lockBoard() { gameArea.classList.add('no-hover'); gameArea.style.pointerEvents = 'none'; }
+function unlockBoard() { gameArea.classList.remove('no-hover'); gameArea.style.pointerEvents = 'auto'; }
+function enableClicksOnly() { gameArea.style.pointerEvents = 'auto'; }
+
+/* ========= Carteles ========= */
+function showResult(text) {
+    resultEl.textContent = text;
+    resultEl.classList.remove('hidden');
+    return new Promise(res => setTimeout(() => { resultEl.classList.add('hidden'); res(); }, 1000));
+}
+function showFeedback(win) {
+    feedbackEl.textContent = win ? '¡Bien Visto!' : '¡Muy lento!';
+    feedbackEl.classList.remove('hidden');
+    return new Promise(res => setTimeout(() => { feedbackEl.classList.add('hidden'); res(); }, 1000));
+}
+function showNextBanner() {
+    lockBoard();
+    nextEl.classList.remove('hidden');
+    return new Promise(res => setTimeout(() => {
+        nextEl.classList.add('hidden');
+        unlockBoard();
+        res();
+    }, 1000));
+}
+
+/* ========= Inicialización ========= */
+cups.forEach(c => c.addEventListener('click', handleCupClick));
 initDifficultyMenu();
-cups.forEach((cup, idx) => cup.addEventListener('click', () => handleCupClick(idx)));
 
-/* ======== Lógica principal ======== */
-async function handleCupClick(idx) {
-    // Bloquea lógica si estamos mezclando
+/* ========= Lógica principal ========= */
+async function handleCupClick(e) {
     if (stage === 'shuffling') return;
 
-    const cup = cups[idx];
+    const cup = e.currentTarget;
+    const idx = cups.indexOf(cup);
 
-    /* Animación de feedback inmediato */
-    cup.classList.remove('raise', 'lower');
-    void cup.offsetWidth;
+    /* Animación instantánea de levantar */
+    cup.classList.remove('raise', 'lower'); void cup.offsetWidth;
     cup.classList.add('raise');
-    setTimeout(() => cup.classList.remove('raise'), 350);
 
-    /* ───────── Etapa 1: esconder la pelota ───────── */
+    /* -------- Etapa 1: esconder la pelota -------- */
     if (stage === 'hide') {
-        gameArea.classList.add('no-hover');     // bloquea hover desde YA
-        ballIndex = idx;                        // guardo dónde quedó la pelota
-        await liftCup(cup, true);               // levantamos un poco y mostramos
+        lockBoard();
+        ballIndex = idx;
+        await liftCup(cup, true);
 
         stage = 'shuffling';
-        gameArea.classList.add('shuffling');    // bloquea clicks + hover
-        await sleep(300);                       // 0,3 s fijo
-        await mixCups();                        // mezcla visible
+        gameArea.classList.add('shuffling');
+        await sleep(300);
+        await mixCups();
+        gameArea.classList.remove('shuffling');
 
-        gameArea.classList.remove('shuffling'); // clicks vuelven (hover sigue off)
+        enableClicksOnly();
         stage = 'guess';
         return;
     }
 
-    /* ───────── Etapa 2: adivinar ───────── */
     if (stage === 'guess') {
-        attempts++;
-        attemptsEl.textContent = `Intentos: ${attempts}`;
+        lockBoard();
+        attempts++; attemptsEl.textContent = `Intentos: ${attempts}`;
 
-        if (idx === ballIndex) {                // ✔️ acertó
-            wins++;
-            winsEl.textContent = `Ganados: ${wins}`;
+        const win = idx === ballIndex;
+
+        if (win) {
+            wins++; winsEl.textContent = `Ganados: ${wins}`;
+            streak++; streakEl.textContent = `Racha: ${streak}`;
             await liftCup(cup, true);
-        } else {                                // ❌ falló
-            await liftCup(cup, false);
-            await liftCup(cups[ballIndex], true);
+            await showResult(rand(WIN_MESSAGES));
+        } else {
+            streak = 0; streakEl.textContent = 'Racha: 0';
+            await Promise.all([
+                liftCup(cup, false),
+                liftCup(cups[ballIndex], true)
+            ]);
+            await showResult(rand(WRONG_MESSAGES));
         }
 
-        stage = 'finished';
-        await sleep(1000);
-        resetRound();                           // quita .no-hover y reinicia
+        await showFeedback(win);
+        await showNextBanner();
+        resetRound();
     }
+
 }
 
-/* ======== Animaciones de levantar / cubrir vaso ======== */
+/* ========= Animaciones de vasos ========= */
 async function liftCup(cup, showBall) {
-    // 1) Levanta el vaso
     cup.classList.remove('lower', 'cover');
     cup.classList.add('raise');
     if (showBall) cup.classList.add('show-ball');
 
-    await sleep(400);                // vaso arriba un rato para ver la pelota
+    await sleep(400);
+
     cup.classList.remove('raise');
-
-    // 2) Desciende con la nueva animación “cover”
     cup.classList.add('cover');
-    await sleep(500);                // duración de coverBall
-    cup.classList.remove('cover');
+    await sleep(500);
 
+    cup.classList.remove('cover');
     if (showBall) cup.classList.remove('show-ball');
 }
 
-
-/* ======== Mezcla 2 D visible ======== */
 async function mixCups() {
     const { swaps, speed } = DIFFICULTY[currentDiff];
-
     for (let n = 0; n < swaps; n++) {
-        // selecciona dos índices distintos (0-2)
         let i = Math.floor(Math.random() * 3);
-        let j;
-        do { j = Math.floor(Math.random() * 3); } while (j === i);
-
+        let j; do { j = Math.floor(Math.random() * 3); } while (j === i);
         await animateSwap(i, j, speed);
-
-        // si la pelota estaba en uno de los vasos, actualiza ballIndex
-        if (ballIndex === i)      ballIndex = j;
-        else if (ballIndex === j) ballIndex = i;
+        if (ballIndex === i) ballIndex = j; else if (ballIndex === j) ballIndex = i;
     }
 }
-
-/* Intercambio visible entre dos vasos */
 function animateSwap(i, j, duration) {
-    return new Promise(resolve => {
-        const cupA   = cups[i];
-        const cupB   = cups[j];
-        const rectA  = cupA.getBoundingClientRect();
-        const rectB  = cupB.getBoundingClientRect();
-        const deltaX = rectB.left - rectA.left; // distancia horizontal
-
-        // prepara transición
-        [cupA, cupB].forEach(el => {
-            el.style.transition = `transform ${duration}ms`;
-        });
-
-        // mueve cada vaso hacia la posición del otro
-        cupA.style.transform = `translateX(${ deltaX }px)`;
-        cupB.style.transform = `translateX(${ -deltaX }px)`;
-
-        // al terminar la animación:
+    return new Promise(res => {
+        const A = cups[i], B = cups[j];
+        const dx = B.getBoundingClientRect().left - A.getBoundingClientRect().left;
+        [A, B].forEach(el => el.style.transition = `transform ${duration}ms`);
+        A.style.transform = `translateX(${dx}px)`;
+        B.style.transform = `translateX(${-dx}px)`;
         setTimeout(() => {
-            // limpia estilos en línea
-            [cupA, cupB].forEach(el => {
-                el.style.transition = '';
-                el.style.transform  = '';
-            });
-
-            // reordena en el DOM para mantener la posición real
-            if (deltaX > 0) cupA.after(cupB);
-            else            cupB.after(cupA);
-
-            // actualiza el array 'cups'
+            [A, B].forEach(el => { el.style.transition = ''; el.style.transform = ''; });
+            if (dx > 0) A.after(B); else B.after(A);
             [cups[i], cups[j]] = [cups[j], cups[i]];
-            resolve();
+            res();
         }, duration);
     });
 }
 
-/* ======== Reinicio de ronda ======== */
+/* ========= Reinicio de ronda ========= */
 function resetRound() {
     stage = 'hide';
-    gameArea.classList.remove('no-hover');  // reactiva hover
+    cups.forEach(c => {
+        c.classList.remove('raise', 'show-ball');
+        c.classList.add('lower');
+        setTimeout(() => c.classList.remove('lower'), 800);
+    });
 }
 
-/* ======== Menú de dificultad ======== */
+/* ========= Menú de dificultad ========= */
 function initDifficultyMenu() {
-    const btn  = document.getElementById('difficultyBtn');
+    const btn = document.getElementById('difficultyBtn');
     const menu = document.getElementById('difficultyMenu');
 
     btn.addEventListener('click', () => {
-        const expanded = btn.getAttribute('aria-expanded') === 'true';
-        btn.setAttribute('aria-expanded', !expanded);
+        const ex = btn.getAttribute('aria-expanded') === 'true';
+        btn.setAttribute('aria-expanded', !ex);
         menu.classList.toggle('hidden');
     });
 
     menu.addEventListener('click', e => {
         if (e.target.matches('[data-level]')) {
-            currentDiff   = e.target.dataset.level;
+            currentDiff = e.target.dataset.level;
             btn.textContent = `Dificultad: ${e.target.textContent} ▾`;
             menu.classList.add('hidden');
             btn.setAttribute('aria-expanded', 'false');

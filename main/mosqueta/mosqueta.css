@@ -1,16 +1,22 @@
+/* ======== Variables globales ======== */
 :root {
+    --bg: #0d0b0e;
+    --magenta: #ff1efb;
+    --cup-size-desk: 300px;
+    --cup-size-tab: 260px;
+    --cup-size-mobile: 200px;
+    box-sizing: border-box;
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
-    /* --bg: #0d0b0e; */
-    /* --magenta: #ff1efb; */
-    /* --cup-size-desk: 300px;desktop ≥ 1024 px */
-    /* --cup-size-tab: 260px;tablet 768-1023 px */
-    /* --cup-size-mobile: 220px;móvil ≤ 767 px */
-    /* font-family: system-ui, sans-serif; */
-    /* agregar tipografia */
 }
 
+*,
+*::before,
+*::after {
+    box-sizing: inherit;
+}
+
+/* ======== Layout general ======== */
 body {
     font-family: serif;
     background: linear-gradient(-45deg, #010002, #080808, #1d1c1c, #313131);
@@ -18,84 +24,59 @@ body {
     flex-direction: column;
     align-items: center;
     padding-top: 50px;
-    /* min-height: 100vh; */
-    /* margin: 0; */
 }
 
 header {
-    /* display: flex; */
-    /* flex-direction: column; */
-    /* align-items: center; */
-    /* justify-content: center; */
     text-align: center;
-    margin: 3.5rem auto 1.2rem auto;
+    margin: 3.5rem auto 1.2rem;
     padding: 1.2rem 1.5rem;
     width: 100%;
-    max-width: 900px;
-    background: rgba(20, 20, 20, 0.85);
+    max-width: 700px;
+    background: rgba(20, 20, 20, .85);
     backdrop-filter: blur(10px);
     border-radius: 16px;
-    box-shadow: 0 4px 18px rgba(0,0,0,0.45);
-    border: 1.5px solid rgba(255,255,255,0.1);
-    /* display: flex; */
-    /* flex-direction: column; */
-    /* align-items: center; */
-    /* justify-content: center; */
+    box-shadow: 0 4px 18px rgba(0, 0, 0, .45);
+    border: 1.5px solid rgba(255, 255, 255, .1);
 }
 
 h1 {
     font-size: 2.2rem;
     font-weight: 800;
-    color: #ffffff;
+    color: #fff;
     text-transform: uppercase;
     letter-spacing: 2px;
     margin-bottom: 0.5rem;
     font-family: 'Ethnocentric', sans-serif;
-    text-shadow: 
-        0 0 10px rgba(255, 255, 255, 0.5),
-        0 0 20px rgba(255, 255, 255, 0.3),
-        0 0 30px rgba(255, 255, 255, 0.2);
+    text-shadow: 0 0 10px rgba(255, 255, 255, .5),
+        0 0 20px rgba(255, 255, 255, .3),
+        0 0 30px rgba(255, 255, 255, .2);
     animation: titleGlow 2s ease-in-out infinite alternate;
     cursor: pointer;
 }
 
 @keyframes titleGlow {
     from {
-        text-shadow: 
-            0 0 10px rgba(255, 255, 255, 0.5),
-            0 0 20px rgba(255, 255, 255, 0.3),
-            0 0 30px rgba(255, 255, 255, 0.2);
+        text-shadow: 0 0 10px rgba(255, 255, 255, .5),
+            0 0 20px rgba(255, 255, 255, .3),
+            0 0 30px rgba(255, 255, 255, .2);
     }
+
     to {
-        text-shadow: 
-            0 0 20px rgba(255, 255, 255, 0.7),
-            0 0 30px rgba(255, 255, 255, 0.5),
-            0 0 40px rgba(255, 255, 255, 0.3);
+        text-shadow: 0 0 20px rgba(255, 255, 255, .7),
+            0 0 30px rgba(255, 255, 255, .5),
+            0 0 40px rgba(255, 255, 255, .3);
     }
 }
 
-/* inicialmente oculto */
+/* ---------- Descripción plegable ---------- */
 .title-box .game-desc {
     overflow: hidden;
     height: 0;
     opacity: 0;
-    transition:
-        height .5s cubic-bezier(.68, -0.55, .27, 1.55),
-        /* explicacion de como funciona */
-        /* Una Bézier cúbica describe la velocidad de la animación mediante cuatro puntos de control: */
-        /* (0,0) → (x1, y1) → (x2, y2) → (1,1) */
-        /* En este caso: */
-        /* P1: ( 0.68 , -0.55 ) */
-        /* Arranca rápido (pendiente inicial > 1) y, como y1 es negativo, empieza antes de t = 0 (efecto “salto”). */
-        /* P2: ( 0.27 , 1.55 ) */
-        /* Con y2 > 1 la curva rebasa el destino y vuelve, generando un leve overshoot. */
-        /* Visualmente se pasa un poco y rebota suavemente hasta asentarse. */
-        opacity .3s;
-    interpolate-size: allow-keywords;/* permite animar hasta auto (funcion experimental)*/
-
+    transition: height .5s cubic-bezier(.68, -0.55, .27, 1.55), opacity .3s;
+    interpolate-size: allow-keywords;
     font-size: 1rem;
     color: #e0e0e0;
-    margin-bottom: .5rem;
     background: rgba(40, 40, 40, .7);
     border-radius: 0 0 10px 10px;
     padding: 0 1rem;
@@ -106,57 +87,52 @@ h1 {
 
 .title-box:hover .game-desc,
 .title-box:focus-within .game-desc {
-    height: auto;/* se anima gracias a interpolate-size */
+    height: auto;
     opacity: 1;
 }
 
-/* --- Compatibilidad para navegadores sin interpolate-size */
+/* Fallback para navegadores sin interpolate‑size */
 @supports not (interpolate-size:allow-keywords) {
     .title-box .game-desc {
-        height: 0;
-        /* se animará max-height en su lugar */
         max-height: 0;
-        transition:
-            max-height .5s cubic-bezier(.68, -0.55, .27, 1.55),
-            opacity .3s;
-        
-        font-size: 1rem;
-        color: #e0e0e0;
-        margin-bottom: .5rem;
-        background: rgba(40, 40, 40, .7);
-        border-radius: 0 0 10px 10px;
-        padding: 0 1rem;
-        width: 90%;
-        margin: 0 auto;
-        text-align: justify;
     }
 
     .title-box:hover .game-desc,
     .title-box:focus-within .game-desc {
         max-height: 10rem;
-        /* ajusta según tu contenido */
     }
 }
 
-.stats {
+/* ---------- Score + menú dificultad ---------- */
+.scoreboard {
+    margin-top: .2rem;
+    font-size: 1.1rem;
     display: flex;
-    gap: 2rem;
+    gap: .7rem;
     justify-content: center;
-    font-size: 1.2rem;
-    margin-bottom: 1rem;
+    text-align:center;
+    flex-wrap: wrap;
+}
+
+.score-item {
+    padding: .15rem .6rem;
+    border: 1px solid rgba(255, 255, 255, .3);
+    border-radius: 4px;
+    background: rgba(255, 255, 255, .1);
+    backdrop-filter: blur(5px);
+    color: #fff;
+    white-space: nowrap;
 }
 
 .difficulty-wrapper {
     position: relative;
-    display: inline-block;
+    z-index: 1000;
 }
 
-
-
 #difficultyBtn {
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    color: white;
+    background: rgba(255, 255, 255, .1);
+    border: 1px solid rgba(255, 255, 255, .3);
+    color: #fff;
     padding: .4rem 1.2rem;
     font-weight: 600;
     border-radius: 5px;
@@ -174,6 +150,7 @@ h1 {
     border-radius: 6px;
     min-width: 100%;
     box-shadow: 0 2px 10px rgba(0, 0, 0, .7);
+    z-index:6500 !important;
 }
 
 #difficultyMenu.hidden {
@@ -189,53 +166,23 @@ h1 {
     background: rgba(255, 255, 255, .08);
 }
 
-.scoreboard {
-    margin-top: 0.2rem;
-    font-size: 1.1rem;
-    display: flex;
-    gap: 0.7rem;
-    justify-content: center;
-    flex-wrap: wrap;
-}
-
-.score-item {
-    padding: 0.15rem 0.6rem;
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    border-radius: 4px;
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(5px);
-    color: white;
-    white-space: nowrap;
-}
-
-/* ───────── Área de juego ───────── */
-
-/* style="background: rgba(20, 20, 20, 0.85); backdrop-filter: blur(10px);" */
-
+/* ======== Área de juego ======== */
 .game-board {
-    background: rgba(20, 20, 20, 0.85);
+    background: rgba(20, 20, 20, .85);
     backdrop-filter: blur(10px);
-    /* z-index: -1; */
     display: flex;
     justify-content: center;
     align-items: center;
     gap: clamp(1rem, 4vw, 3rem);
-    padding: 0.5rem 0.5rem 1.2rem;
+    padding: .5rem .5rem 1.2rem;
     perspective: 1200px;
-    min-height: unset;
-    height: auto;
-    width: auto;
-    background: linear-gradient(-45deg, #010002, #080808, #1d1c1c, #313131);
     border-radius: 18px;
-    box-shadow: 0 2px 16px 0 rgba(0,0,0,0.10);
-    position: relative;
-    margin-top: 150px;
-    /* Borde neon */
     border: 3px solid #ff1efb;
-    box-shadow:
-        0 0 16px 4px #ff1efb,
+    box-shadow: 0 0 16px 4px #ff1efb,
         0 0 32px 8px #ff1efb,
-        0 2px 16px 0 rgba(0,0,0,0.10);
+        0 2px 16px rgba(0, 0, 0, .1);
+    margin-top: 220px;
+    position: relative;
 }
 
 .cup {
@@ -243,14 +190,10 @@ h1 {
     width: var(--cup-size-desk);
     cursor: pointer;
     transform-style: preserve-3d;
-    top: 0;
-    transform: none;
-    margin-top: 0;
 }
 
 .cup img {
     width: 100%;
-    height: auto;
     display: block;
     transition: transform .4s;
 }
@@ -265,29 +208,35 @@ h1 {
     border-radius: 50%;
     background: url("imagenes/ball-neon.png") center/cover no-repeat;
     opacity: 0;
+    pointer-events: none;
     filter: drop-shadow(0 0 6px var(--magenta)) drop-shadow(0 0 12px var(--magenta));
     transition: opacity .25s;
-    pointer-events: none;
 }
 
 @keyframes neonPulse {
-    0%, 100% { filter: drop-shadow(0 0 6px var(--magenta)); }
-    50%       { filter: drop-shadow(0 0 14px var(--magenta)); }
-}
-.show-ball .ball {
-    animation: neonPulse 1s ease-in-out infinite;
-}
 
-/* ───────── Animaciones ───────── */
-@keyframes raise {
-    0% {
-        transform: translateY(0) rotateX(0deg);
+    0%,
+    100% {
+        filter: drop-shadow(0 0 6px var(--magenta));
     }
 
     50% {
-        transform: translateY(-30%) rotateX(25deg);
+        filter: drop-shadow(0 0 14px var(--magenta));
+    }
+}
+
+.show-ball .ball {
+    opacity: 1;
+    animation: neonPulse 1s ease-in-out infinite;
+}
+
+/* ---------- Animaciones levantar/cubrir ---------- */
+@keyframes raise {
+    0% {
+        transform: translateY(0) rotateX(0);
     }
 
+    50%,
     100% {
         transform: translateY(-30%) rotateX(25deg);
     }
@@ -299,7 +248,7 @@ h1 {
     }
 
     100% {
-        transform: translateY(0) rotateX(0deg);
+        transform: translateY(0) rotateX(0);
     }
 }
 
@@ -311,32 +260,92 @@ h1 {
     animation: lower 1.2s forwards ease-in-out;
 }
 
-.show-ball .ball {
-    opacity: 1;
+.cup.cover img {
+    animation: coverBall .5s forwards ease;
 }
 
+@keyframes coverBall {
+    0% {
+        transform: translateY(-30%) rotateX(25deg);
+    }
 
-.cup:hover img {
+    75% {
+        transform: translateY(4%) rotateX(-3deg);
+    }
+
+    100% {
+        transform: translateY(0) rotateX(0);
+    }
+}
+
+/* ---------- Hover (solo cuando se permite) ---------- */
+.cup:not(.raise):not(.cover):hover img {
     animation: raise 1.2s forwards ease-in-out;
 }
 
-/* Mostrar la pelotita al hacer hover cuando el vaso está levantado */
-.cup:hover .ball {
+.cup:not(.raise):not(.cover):hover .ball {
     opacity: 1;
     animation: neonPulse 1s ease-in-out infinite;
 }
 
-.cup:not(:hover) img {
-    animation: lower 1.2s forwards ease-in-out;
+/* ---------- Bloqueo de interacción ---------- */
+.game-board.shuffling,
+.game-board.no-hover {
+    pointer-events: none;
 }
 
+.game-board.shuffling .cup:hover img,
+.game-board.no-hover .cup:hover img {
+    animation: none;
+}
+
+.game-board.shuffling .cup:hover .ball,
+.game-board.no-hover .cup:hover .ball {
+    opacity: 0;
+    animation: none;
+}
+
+/* ---------- Banner de resultado ---------- */
+.result,
+.feedback,
+.next-banner{
+  position:absolute;
+  top:50%; left:50%;
+  transform:translate(-50%,-50%);
+  padding:.8rem 2.2rem;
+  font-weight:800;
+  font-size:1.3rem;
+  color:#fff;
+  background:rgba(255,255,255,.12);
+  border:2px solid #ff1efb;
+  border-radius:12px;
+  text-shadow:0 0 8px #ff1efb,0 0 16px #ff1efb;
+  backdrop-filter:blur(8px);
+  transition:opacity .3s ease;
+  pointer-events:none;
+}
+
+/* z‑index escalonado para el orden de aparición */
+.result       { z-index:6100; }
+.feedback     { z-index:6000; }
+.next-banner  { z-index:5900; }
+
+/* estado oculto */
+.result.hidden,
+.feedback.hidden,
+.next-banner.hidden{ opacity:0; }
+
+
+
+.result.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* ---------- Responsivo ---------- */
 @media (max-width:1023px) {
     .cup {
         width: var(--cup-size-tab);
-    }
-
-    .stats {
-        font-size: 1.1rem;
     }
 }
 
@@ -345,7 +354,7 @@ h1 {
         width: var(--cup-size-mobile);
     }
 
-    .stats {
+    .scoreboard {
         flex-direction: column;
         gap: .5rem;
     }
@@ -355,42 +364,33 @@ h1 {
     }
 }
 
-@media (min-width: 0px) {
+/* Ajuste visual para pantallas muy bajas */
+@media (min-width:0px) {
     .game-board {
         height: 20vh;
     }
+
     .cup {
-        top: 0;
-        transform: translateY(0);
         margin-top: calc(0.4 * 20vh - var(--cup-size-desk) / 2);
     }
 }
 
-.difficulty-wrapper {
-    position: relative;
-    z-index: 1000;
+
+
+.next-banner.hidden {
+    opacity: 0;
 }
 
-#difficultyMenu{
-    z-index: 1001;
+/* mismo patrón que el banner de resultado */
+.next-banner:not(.hidden) {
+    opacity: 1;
 }
 
-/* ─── Bloqueo de interacción durante el barajado ─── */
-.game-board.shuffling .cup            { pointer-events: none; }   /* sin clicks ni hovers */
-.game-board.shuffling .cup:hover img  { animation: none; }
-.game-board.shuffling .cup:hover .ball{ opacity: 0;  animation: none; }
 
-/* ─── Sin hover mientras la pelota está escondida ─── */
-.game-board.no-hover .cup:hover img  { animation: none; }
-.game-board.no-hover .cup:hover .ball{ opacity: 0; animation: none; }
-
-/* ─── Desciende y cubre la pelota ─── */
-@keyframes coverBall {
-    0%   { transform: translateY(-30%) rotateX(25deg); } /* parte levantado */
-    75%  { transform: translateY(4%)   rotateX(-3deg); } /* leve “sobrecorrección” */
-    100% { transform: translateY(0)    rotateX(0deg); }  /* queda plano */
+.feedback.hidden {
+    opacity: 0;
 }
 
-.cup.cover img {
-    animation: coverBall .5s forwards ease;
+.feedback:not(.hidden) {
+    opacity: 1;
 }
