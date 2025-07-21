@@ -63,7 +63,7 @@ function logout() {
 
 // Al cargar la página, oculta el preloader y renderiza el menú y la sección correspondiente
 window.addEventListener("load", () => {
-    // ⏱️ Ocultar preloader
+    // Ocultar preloader
     const preloader = document.getElementById("preloader");
     preloader.style.opacity = "0";
     preloader.style.visibility = "hidden";

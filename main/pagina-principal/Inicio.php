@@ -80,7 +80,7 @@ if (!$user) {
     <div class="Contenido" id="Contenido">
         <!-- SECCIÓN INICIO: saludo al usuario -->
         <div id="mainContent" class="container mt-5" style="display: none;">
-            <h1 class="text-center">Bienvenido, <?php echo htmlspecialchars($user); ?>, a Zentryx</h1>
+            <h1 class="text-center">Bienvenido, <?php echo htmlspecialchars($user); ?>, a <span class="resaltado">Zentryx</span></h1>
             <p class="text-center">(Página de inicio)</p>
         </div>
 
