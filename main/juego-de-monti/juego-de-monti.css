@@ -1,0 +1,30 @@
+body {
+    padding: 20px;
+    background-color: #f2f2f2;
+}
+
+#game-container {
+    margin-bottom: 20px;
+}
+
+#doors {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.door {
+    margin: 0 10px;
+    cursor: pointer;
+    transition: transform 0.3s;
+    width: 150px;
+    height: 200px;
+}
+
+.door:hover {
+    transform: scale(1.05);
+}
+
+#stats-container {
+    margin-top: 30px;
+}

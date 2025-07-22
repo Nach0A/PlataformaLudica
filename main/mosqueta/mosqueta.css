@@ -1,0 +1,319 @@
+:root {
+    --bg: #0d0b0e;
+    --magenta: #ff1efb;
+    --cup-size-desk: 300px;/* desktop ≥ 1024 px */
+    --cup-size-tab: 260px;/* tablet 768-1023 px */
+    --cup-size-mobile: 220px;/* móvil ≤ 767 px */
+    font-family: system-ui, sans-serif;
+    /* agregar tipografia */
+}
+
+body {
+    font-family: serif;
+    background: linear-gradient(-45deg, #010002, #080808, #1d1c1c, #313131);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 50px;
+    min-height: 100vh;
+    margin: 0;
+}
+
+header {
+    text-align: center;
+    margin: 3.5rem auto 1.2rem auto;
+    padding: 1.2rem 1.5rem;
+    width: 100%;
+    max-width: 900px;
+    background: rgba(20, 20, 20, 0.85);
+    backdrop-filter: blur(10px);
+    border-radius: 16px;
+    box-shadow: 0 4px 18px rgba(0,0,0,0.45);
+    border: 1.5px solid rgba(255,255,255,0.12);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+header h1 {
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: #ffffff;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 0.5rem;
+    font-family: 'Ethnocentric', sans-serif;
+    text-shadow: 
+        0 0 10px rgba(255, 255, 255, 0.5),
+        0 0 20px rgba(255, 255, 255, 0.3),
+        0 0 30px rgba(255, 255, 255, 0.2);
+    animation: titleGlow 2s ease-in-out infinite alternate;
+}
+
+@keyframes titleGlow {
+    from {
+        text-shadow: 
+            0 0 10px rgba(255, 255, 255, 0.5),
+            0 0 20px rgba(255, 255, 255, 0.3),
+            0 0 30px rgba(255, 255, 255, 0.2);
+    }
+    to {
+        text-shadow: 
+            0 0 20px rgba(255, 255, 255, 0.7),
+            0 0 30px rgba(255, 255, 255, 0.5),
+            0 0 40px rgba(255, 255, 255, 0.3);
+    }
+}
+
+.stats {
+    display: flex;
+    gap: 2rem;
+    justify-content: center;
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+}
+
+.difficulty-wrapper {
+    position: relative;
+    display: inline-block;
+}
+
+
+
+#difficultyBtn {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: white;
+    padding: .4rem 1.2rem;
+    font-weight: 600;
+    border-radius: 5px;
+    cursor: pointer;
+    backdrop-filter: blur(5px);
+}
+
+#difficultyMenu {
+    position: absolute;
+    top: 110%;
+    left: 0;
+    background: #29252f;
+    list-style: none;
+    padding: .3rem 0;
+    border-radius: 6px;
+    min-width: 100%;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, .7);
+}
+
+#difficultyMenu.hidden {
+    display: none;
+}
+
+#difficultyMenu li {
+    padding: .5rem 1rem;
+    cursor: pointer;
+}
+
+#difficultyMenu li:hover {
+    background: rgba(255, 255, 255, .08);
+}
+
+.scoreboard {
+    margin-top: 0.2rem;
+    font-size: 1.1rem;
+    display: flex;
+    gap: 0.7rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.score-item {
+    padding: 0.15rem 0.6rem;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(5px);
+    color: white;
+    white-space: nowrap;
+}
+
+/* ───────── Área de juego ───────── */
+.game-area {
+    /* z-index: -1; */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: clamp(1rem, 4vw, 3rem);
+    padding: 0.5rem 0.5rem 1.2rem;
+    perspective: 1200px;
+    min-height: unset;
+    height: auto;
+    width: auto;
+    background: linear-gradient(-45deg, #010002, #080808, #1d1c1c, #313131);
+    border-radius: 18px;
+    box-shadow: 0 2px 16px 0 rgba(0,0,0,0.10);
+    position: relative;
+    margin-top: 150px;
+    /* Borde neon */
+    border: 3px solid #ff1efb;
+    box-shadow:
+        0 0 16px 4px #ff1efb,
+        0 0 32px 8px #ff1efb,
+        0 2px 16px 0 rgba(0,0,0,0.10);
+}
+
+.cup {
+    position: relative;
+    width: var(--cup-size-desk);
+    cursor: pointer;
+    transform-style: preserve-3d;
+    top: 0;
+    transform: none;
+    margin-top: 0;
+}
+
+.cup img {
+    width: 100%;
+    height: auto;
+    display: block;
+    transition: transform .4s;
+}
+
+.ball {
+    position: absolute;
+    bottom: 15%;
+    left: 50%;
+    translate: -50% 0;
+    width: 35%;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: url("imagenes/ball-neon.png") center/cover no-repeat;
+    opacity: 0;
+    filter: drop-shadow(0 0 6px var(--magenta)) drop-shadow(0 0 12px var(--magenta));
+    transition: opacity .25s;
+    pointer-events: none;
+}
+
+@keyframes neonPulse {
+    0%, 100% { filter: drop-shadow(0 0 6px var(--magenta)); }
+    50%       { filter: drop-shadow(0 0 14px var(--magenta)); }
+}
+.show-ball .ball {
+    animation: neonPulse 1s ease-in-out infinite;
+}
+
+/* ───────── Animaciones ───────── */
+@keyframes raise {
+    0% {
+        transform: translateY(0) rotateX(0deg);
+    }
+
+    50% {
+        transform: translateY(-30%) rotateX(25deg);
+    }
+
+    100% {
+        transform: translateY(-30%) rotateX(25deg);
+    }
+}
+
+@keyframes lower {
+    0% {
+        transform: translateY(-30%) rotateX(25deg);
+    }
+
+    100% {
+        transform: translateY(0) rotateX(0deg);
+    }
+}
+
+.cup.raise img {
+    animation: raise .35s forwards ease-in-out;
+}
+
+.cup.lower img {
+    animation: lower 1.2s forwards ease-in-out;
+}
+
+.show-ball .ball {
+    opacity: 1;
+}
+
+
+.cup:hover img {
+    animation: raise 1.2s forwards ease-in-out;
+}
+
+/* Mostrar la pelotita al hacer hover cuando el vaso está levantado */
+.cup:hover .ball {
+    opacity: 1;
+    animation: neonPulse 1s ease-in-out infinite;
+}
+
+.cup:not(:hover) img {
+    animation: lower 1.2s forwards ease-in-out;
+}
+
+@media (max-width:1023px) {
+    .cup {
+        width: var(--cup-size-tab);
+    }
+
+    .stats {
+        font-size: 1.1rem;
+    }
+}
+
+@media (max-width:767px) {
+    .cup {
+        width: var(--cup-size-mobile);
+    }
+
+    .stats {
+        flex-direction: column;
+        gap: .5rem;
+    }
+
+    .game-area {
+        gap: 1rem;
+    }
+}
+
+@media (min-width: 0px) {
+    .game-area {
+        height: 20vh;
+    }
+    .cup {
+        top: 0;
+        transform: translateY(0);
+        margin-top: calc(0.4 * 20vh - var(--cup-size-desk) / 2);
+    }
+}
+
+.difficulty-wrapper {
+    position: relative;
+    z-index: 1000;
+}
+
+#difficultyMenu{
+    z-index: 1001;
+}
+
+/* ─── Bloqueo de interacción durante el barajado ─── */
+.game-area.shuffling .cup            { pointer-events: none; }   /* sin clicks ni hovers */
+.game-area.shuffling .cup:hover img  { animation: none; }
+.game-area.shuffling .cup:hover .ball{ opacity: 0;  animation: none; }
+
+/* ─── Sin hover mientras la pelota está escondida ─── */
+.game-area.no-hover .cup:hover img  { animation: none; }
+.game-area.no-hover .cup:hover .ball{ opacity: 0; animation: none; }
+
+/* ─── Desciende y cubre la pelota ─── */
+@keyframes coverBall {
+    0%   { transform: translateY(-30%) rotateX(25deg); } /* parte levantado */
+    75%  { transform: translateY(4%)   rotateX(-3deg); } /* leve “sobrecorrección” */
+    100% { transform: translateY(0)    rotateX(0deg); }  /* queda plano */
+}
+
+.cup.cover img {
+    animation: coverBall .5s forwards ease;
+}
