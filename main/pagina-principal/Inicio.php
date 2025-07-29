@@ -77,48 +77,56 @@ if (!$user) {
     </nav>
 
     <!-- CONTENIDO GENERAL -->
-    <div class="Contenido" id="Contenido">
-        <!-- SECCIÓN INICIO: saludo al usuario -->
-        <div id="mainContent" class="container mt-5" style="display: none;">
-            <h1 class="text-center">Bienvenido, <?php echo htmlspecialchars($user); ?>, a <span class="resaltado">Zentryx</span></h1>
-            <p class="text-center">(Página de inicio)</p>
+    <!-- SECCIÓN INICIO: saludo al usuario -->
+    <div id="mainContent" class="fade-in inicio-bienvenida" style="display: none;">
+        <div class="bienvenida-box">
+            <h1>¡Hola, <span class="usuario"><?php echo htmlspecialchars($user); ?></span>!</h1>
+            <h2>Bienvenido a <span class="resaltado">Zentryx</span></h2>
+            <p class="descripcion-inicio">
+                En esta plataforma podés explorar juegos, competir en rankings y desafiar tu mente. <br>
+                ¡Demostrá tus habilidades y subí en la tabla!
+            </p>
+            <a href="#juegos" class="btn-inicio-jugar" onclick="mostrarJuegos()">🎮 Ver Juegos</a>
         </div>
-
-        <!-- SECCIÓN JUEGOS: lista de juegos -->
-        <div class="container-fluid juegos-wrapper" id="juegosContent" style="display: none;">
-            <h1 class="titulo-juegos text-center">Juegos Disponibles</h1>
-
-            <div class="grid-juegos">
-                <div class="tarjeta-juego">
-                    <h2>Memory</h2>
-                    <p>Pon a prueba tu memoria encontrando pares en el menor tiempo posible.</p>
-                    <button class="play-btn" onclick="location.href='../memory/memory.php'">Jugar</button>
-                </div>
-
-                <div class="tarjeta-juego">
-                    <h2>Buscaminas</h2>
-                    <p>Intenta identificar el lugar de todas las minas lo más rapido posible.<br>
-                        Cuenta con 3 niveles de dificultad: fácil, medio y difícil.</p>
-                    <button class="play-btn" onclick="location.href='../buscaminas/buscaminas.php'">Jugar</button>
-                </div>
-
-                <div class="tarjeta-juego">
-                    <h2>Mosqueta</h2>
-                    <p>Intenta seguir el ritmo de los vasos sin perder de vista la pelota</p>
-                    <button class="play-btn" onclick="location.href='../mosqueta/mosqueta.php'">Jugar</button>
-                </div>
-
-                <div class="tarjeta-juego">
-                    <h2>Juego de Monti</h2>
-                    <p>Pon a prueba tu suerte y astusia para encontrar el premio</p>
-                    <button class="play-btn" onclick="location.href='../juego-de-monti/juego-de-monti.php'">Jugar</button>
-                </div>
+    </div>
 
 
-                <!-- aca ponemos más tarjetas para el futuro -->
+
+    <!-- SECCIÓN JUEGOS: lista de juegos -->
+    <div class="container-fluid juegos-wrapper" id="juegosContent" style="display: none;">
+        <h1 class="titulo-juegos text-center">Juegos Disponibles</h1>
+
+        <div class="grid-juegos">
+            <div class="tarjeta-juego">
+                <h2>Memory</h2>
+                <p>Pon a prueba tu memoria encontrando pares en el menor tiempo posible.</p>
+                <button class="play-btn" onclick="location.href='../memory/memory.php'">Jugar</button>
             </div>
 
+            <div class="tarjeta-juego">
+                <h2>Buscaminas</h2>
+                <p>Intenta identificar el lugar de todas las minas lo más rapido posible.<br>
+                    Cuenta con 3 niveles de dificultad: fácil, medio y difícil.</p>
+                <button class="play-btn" onclick="location.href='../buscaminas/buscaminas.php'">Jugar</button>
+            </div>
+
+            <div class="tarjeta-juego">
+                <h2>Mosqueta</h2>
+                <p>Intenta seguir el ritmo de los vasos sin perder de vista la pelota</p>
+                <button class="play-btn" onclick="location.href='../mosqueta/mosqueta.php'">Jugar</button>
+            </div>
+
+            <div class="tarjeta-juego">
+                <h2>Juego de Monti</h2>
+                <p>Pon a prueba tu suerte y astusia para encontrar el premio</p>
+                <button class="play-btn" onclick="location.href='../juego-de-monti/juego-de-monti.php'">Jugar</button>
+            </div>
+
+
+            <!-- aca ponemos más tarjetas para el futuro -->
         </div>
+
+    </div>
     </div>
 
     <!-- SCRIPTS -->
@@ -159,38 +167,38 @@ if (!$user) {
         linkLogo.addEventListener("click", e => {
             e.preventDefault();
             // Agrega la animación
-    linkLogo.classList.add("animate-click");
+            linkLogo.classList.add("animate-click");
 
-    // La quita después de que termina, para que pueda repetirse
-    setTimeout(() => {
-        linkLogo.classList.remove("animate-click");
-    }, 600); // Duración de la animación
+            // La quita después de que termina, para que pueda repetirse
+            setTimeout(() => {
+                linkLogo.classList.remove("animate-click");
+            }, 600); // Duración de la animación
             mostrarInicio();
         });
 
         // Al cargar la página: ocultar preloader y mostrar sección según hash
         window.addEventListener("load", () => {
-    const pre = document.getElementById("preloader");
-    pre.style.opacity = "0";
-    pre.style.visibility = "hidden";
-    pre.style.pointerEvents = "none";
+            const pre = document.getElementById("preloader");
+            pre.style.opacity = "0";
+            pre.style.visibility = "hidden";
+            pre.style.pointerEvents = "none";
 
-    if (location.hash === "#juegos") {
-        mostrarJuegos();
-    } else {
-        mostrarInicio();
+            if (location.hash === "#juegos") {
+                mostrarJuegos();
+            } else {
+                mostrarInicio();
 
-        // Si viene de otra página con animación
-        if (location.hash === "#inicioAnimado") {
-            linkLogo.classList.add("animate-click");
-            setTimeout(() => {
-                linkLogo.classList.remove("animate-click");
-            }, 400); // Tiempo igual al de la animación
-        }
-    }
-});
-</script>
-<script src="../navbar/script.js"></script>
+                // Si viene de otra página con animación
+                if (location.hash === "#inicioAnimado") {
+                    linkLogo.classList.add("animate-click");
+                    setTimeout(() => {
+                        linkLogo.classList.remove("animate-click");
+                    }, 400); // Tiempo igual al de la animación
+                }
+            }
+        });
+    </script>
+    <script src="../navbar/script.js"></script>
 </body>
 
 </html>

@@ -494,3 +494,82 @@ body {
 .navbar-brand.animate-click {
     animation: logoClickAnimation 0.4s ease-in-out;
 }
+/*--------------------------------CONTENIDO--------------------------------*/
+.inicio-bienvenida {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%; /* Asegura que ocupa toda la fila */
+    min-height: calc(100vh - 90px);
+    padding: 20px;
+}
+
+
+.bienvenida-box {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.05));
+    border: 2px solid #ea00ff44;
+    border-radius: 20px;
+    padding: 40px 30px;
+    max-width: 800px;
+    box-shadow: 0 0 20px rgba(234, 0, 255, 0.2);
+    animation: fadeInInicio 1s ease;
+    backdrop-filter: blur(6px);
+    margin: 0 auto;
+    text-align: center;
+}
+
+@keyframes fadeInInicio {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.bienvenida-box h1 {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 2.5rem;
+    color: #d6c4ff;
+    margin-bottom: 10px;
+    text-shadow: 0 0 10px #5500ff;
+}
+
+.bienvenida-box h2 {
+    font-family: 'Ethnocentric', sans-serif;
+    color: #ea00ff;
+    font-size: 2rem;
+    margin-bottom: 25px;
+    text-shadow: 0 0 10px #a64bf4;
+}
+
+.bienvenida-box .descripcion-inicio {
+    font-size: 1.1rem;
+    color: #ccc;
+    margin-bottom: 30px;
+}
+
+.usuario {
+    color: #00ffe7;
+    text-shadow: 0 0 10px #00ffe7;
+}
+
+.btn-inicio-jugar {
+    background: linear-gradient(90deg, #a64bf4, #ea00ff);
+    color: #000;
+    padding: 12px 30px;
+    font-size: 1.1rem;
+    border: none;
+    border-radius: 30px;
+    text-decoration: none;
+    font-weight: bold;
+    box-shadow: 0 0 10px #a64bf4;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.btn-inicio-jugar:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 20px #ea00ff;
+}
