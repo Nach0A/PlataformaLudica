@@ -4,6 +4,7 @@ let timerInterval; // Intervalo del temporizador
 let startTime;     // Marca de tiempo de inicio
 let matches = 0;   // Contador de pares encontrados
 let attempts = 0;  // Contador de intentos realizados
+let tiempoBD = 0; // Tiempo almacenado en la base de datos (inicializado a 0)
 const totalPairs = 12; // Total de pares en el juego
 
 // Referencias al DOM
@@ -140,6 +141,8 @@ function startTimer() {
         const elapsed = Date.now() - startTime;
         const minutes = String(Math.floor(elapsed / 60000)).padStart(2, '0');
         const seconds = String(Math.floor((elapsed % 60000) / 1000)).padStart(2, '0');
+        
+        tiempoBD = elapsed; // Guardar tiempo en milisegundos para la base de datos
         timerEl.textContent = `Tiempo ${minutes}:${seconds}`;
     }, 500);
 }
@@ -147,6 +150,7 @@ function startTimer() {
 // Reinicia el temporizador
 function resetTimer() {
     clearInterval(timerInterval);
+    tiempoBD = 0; // Reiniciar tiempo para la base de datos
     timerEl.textContent = '00:00';
 }
 
